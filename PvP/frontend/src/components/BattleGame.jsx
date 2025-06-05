@@ -124,14 +124,14 @@ const battleReducer = (state, action) => {
         enemyDeck: action.enemyDeck,
         enemyHand: action.enemyHand,
         enemyField: [],
-        playerEnergy: 10,
-        enemyEnergy: 10,       
+        playerEnergy: action.playerStartingEnergy || 10,
+        enemyEnergy: action.enemyStartingEnergy || 10,       
         turn: 1,
         activePlayer: 'player',
         battleLog: [{
           id: Date.now(),
           turn: 1,
-          message: `Battle started! Difficulty: ${action.difficulty.charAt(0).toUpperCase() + action.difficulty.slice(1)} - Prepare for intense combat!`
+          message: `Battle started! Difficulty: ${action.difficulty.charAt(0).toUpperCase() + action.difficulty.slice(1)} - Enemy starts with ${action.enemyStartingEnergy || 10} energy!`
         }],
         playerTools: action.playerTools,
         playerSpells: action.playerSpells,
@@ -1961,6 +1961,19 @@ const BattleGame = ({ onClose }) => {
   const executeAIActionWithAnimation = useCallback(() => {
     const currentEnergy = currentEnemyEnergyRef.current;
     
+    // Create gameState object for enhanced AI
+    const gameState = {
+      turn: turn,
+      playerFieldCount: playerField.length,
+      enemyFieldCount: enemyField.length,
+      playerHandCount: playerHand.length,
+      enemyHandCount: enemyHand.length,
+      playerTotalHealth: playerField.reduce((sum, c) => sum + c.currentHealth, 0),
+      enemyTotalHealth: enemyField.reduce((sum, c) => sum + c.currentHealth, 0),
+      consecutiveActions: consecutiveActions,
+      energyMomentum: energyMomentum
+    };
+    
     const aiAction = determineAIAction(
       difficulty,
       enemyHand,
@@ -1968,7 +1981,8 @@ const BattleGame = ({ onClose }) => {
       playerField,
       enemyTools,
       enemySpells,
-      currentEnergy
+      currentEnergy,
+      gameState // Pass the gameState
     );
     
     console.log("AI determined action:", aiAction);
@@ -1985,7 +1999,7 @@ const BattleGame = ({ onClose }) => {
     } else {
       executeSingleAIActionWithAnimation(aiAction);
     }
-  }, [difficulty, enemyHand, enemyField, playerField, enemyTools, enemySpells]);
+  }, [difficulty, enemyHand, enemyField, playerField, enemyTools, enemySpells, turn, playerHand, consecutiveActions, energyMomentum]);
   
   const executeActionSequenceWithAnimation = useCallback((actionSequence, index) => {
     if (index >= actionSequence.length) {
@@ -2512,8 +2526,14 @@ const BattleGame = ({ onClose }) => {
     
     console.log(`Generated ${enemyTools.length} enemy tools and ${enemySpells.length} enemy spells for ${difficulty} difficulty`);
     
+    // ENHANCED: Use starting energy from difficulty settings
+    const playerStartingEnergy = 10; // Player always starts with 10
+    const enemyStartingEnergy = diffSettings.startingEnergy || 10;
+    
+    console.log(`Starting energy - Player: ${playerStartingEnergy}, Enemy: ${enemyStartingEnergy} (${difficulty} difficulty)`);
+    
     // Reset energy ref
-    currentEnemyEnergyRef.current = 10;
+    currentEnemyEnergyRef.current = enemyStartingEnergy;
     
     dispatch({
       type: ACTIONS.START_BATTLE,
@@ -2525,10 +2545,13 @@ const BattleGame = ({ onClose }) => {
       enemyHand: enemyInitialHand,
       enemyTools: enemyTools,
       enemySpells: enemySpells,
-      difficulty
+      difficulty,
+      // Pass starting energy values
+      playerStartingEnergy: playerStartingEnergy,
+      enemyStartingEnergy: enemyStartingEnergy
     });
     
-    addToBattleLog(`Your turn. The enemy has ${enemyTools.length + enemySpells.length} special items!`);
+    addToBattleLog(`Battle started! Enemy has ${enemyTools.length + enemySpells.length} special items and ${enemyStartingEnergy} starting energy!`);
   }, [creatureNfts, toolNfts, spellNfts, difficulty, addNotification, addToBattleLog]);
   
   // EVENT HANDLERS (ENHANCED WITH ANIMATIONS)
