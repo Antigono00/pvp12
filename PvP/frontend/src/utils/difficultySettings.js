@@ -1,111 +1,134 @@
-// src/utils/difficultySettings.js - BALANCED DIFFICULTY SYSTEM
+// src/utils/difficultySettings.js - ENHANCED DIFFICULTY SYSTEM
 import { 
   getRandomCreatureTemplate, 
   createEnemyCreature 
 } from './enemyCreatures';
 
-// ===== BALANCED DIFFICULTY SETTINGS =====
-// Define settings for each difficulty level - PROPERLY SCALED
+// ===== SIGNIFICANTLY INCREASED DIFFICULTY SETTINGS =====
+// Balanced to require specific creature compositions to win
 export const getDifficultySettings = (difficulty) => {
   const settings = {
     easy: {
-      enemyStatsMultiplier: 0.9,     // Slightly weaker enemies
+      // Easy now requires: 1 Form 3, 1 Form 2, 1 Form 1 + good spell usage
+      enemyStatsMultiplier: 1.15,     // Increased from 0.9
       enemyCreatureLevel: {
-        min: 0, // Form 0 creatures
-        max: 1  // Up to Form 1 creatures
+        min: 1, // More Form 1-2 creatures
+        max: 2  // Up to Form 2 creatures
       },
       enemyRarity: {
-        common: 0.7,
-        rare: 0.25,
-        epic: 0.05,
-        legendary: 0
+        common: 0.4,
+        rare: 0.35,
+        epic: 0.2,
+        legendary: 0.05
       },
-      initialHandSize: 2,
-      enemyDeckSize: 4,
-      maxFieldSize: 4,               // Balanced field size
-      enemyAILevel: 1,
-      enemyEnergyRegen: 2,
+      initialHandSize: 3,            // Increased from 2
+      enemyDeckSize: 6,              // Increased from 4
+      maxFieldSize: 5,               // Increased from 4
+      enemyAILevel: 2,               // Increased from 1
+      enemyEnergyRegen: 3,           // Increased from 2
       rewardMultiplier: 0.5,
-      multiActionChance: 0.2,        // 20% chance for multiple actions
-      aggressionLevel: 0.3           // 30% aggression
+      multiActionChance: 0.35,       // Increased from 0.2
+      aggressionLevel: 0.5,          // Increased from 0.3
+      startingEnergy: 12,            // New: Start with more energy
+      bonusStartingItems: 1,         // New: Extra starting items
+      focusFireChance: 0.4,          // New: Chance to focus attacks
+      comboAwareness: 0.3,           // New: Awareness of combo mechanics
+      predictiveDepth: 1             // New: Turns to look ahead
     },
     
     medium: {
-      enemyStatsMultiplier: 1.0,     // Equal strength
-      enemyCreatureLevel: {
-        min: 0, // Form 0-2 creatures
-        max: 2
-      },
-      enemyRarity: {
-        common: 0.5,
-        rare: 0.35,
-        epic: 0.15,
-        legendary: 0
-      },
-      initialHandSize: 3,
-      enemyDeckSize: 5,
-      maxFieldSize: 5,
-      enemyAILevel: 2,
-      enemyEnergyRegen: 3,
-      rewardMultiplier: 1.0,
-      multiActionChance: 0.4,        // 40% chance for multiple actions
-      aggressionLevel: 0.5           // 50% aggression
-    },
-    
-    hard: {
-      enemyStatsMultiplier: 1.2,     // 20% stronger
+      // Medium requires: 2 Form 3, 1 Form 2, 1 Form 1
+      enemyStatsMultiplier: 1.35,     // Increased from 1.0
       enemyCreatureLevel: {
         min: 1, // Form 1-3 creatures
         max: 3
       },
       enemyRarity: {
         common: 0.2,
-        rare: 0.4,
-        epic: 0.3,
+        rare: 0.35,
+        epic: 0.35,
         legendary: 0.1
       },
       initialHandSize: 3,
-      enemyDeckSize: 6,
+      enemyDeckSize: 7,              // Increased from 5
       maxFieldSize: 5,
-      enemyAILevel: 3,
-      enemyEnergyRegen: 4,
-      rewardMultiplier: 1.5,
-      multiActionChance: 0.6,        // 60% chance for multiple actions
-      aggressionLevel: 0.7           // 70% aggression
+      enemyAILevel: 3,               // Increased from 2
+      enemyEnergyRegen: 4,           // Increased from 3
+      rewardMultiplier: 1.0,
+      multiActionChance: 0.55,       // Increased from 0.4
+      aggressionLevel: 0.65,         // Increased from 0.5
+      startingEnergy: 15,            // New
+      bonusStartingItems: 2,         // New
+      focusFireChance: 0.6,          // New
+      comboAwareness: 0.5,           // New
+      predictiveDepth: 2             // New
     },
     
-    expert: {
-      enemyStatsMultiplier: 1.5,     // 50% stronger
+    hard: {
+      // Hard requires: 4 Form 3, 2 Form 2, 2 Form 1
+      enemyStatsMultiplier: 1.6,      // Increased from 1.2
       enemyCreatureLevel: {
         min: 2, // Form 2-3 creatures
         max: 3
       },
       enemyRarity: {
-        common: 0,
-        rare: 0.3,
-        epic: 0.5,
-        legendary: 0.2
+        common: 0.05,
+        rare: 0.25,
+        epic: 0.45,
+        legendary: 0.25
       },
-      initialHandSize: 4,
-      enemyDeckSize: 7,
+      initialHandSize: 4,             // Increased from 3
+      enemyDeckSize: 8,               // Increased from 6
+      maxFieldSize: 6,                // Increased from 5
+      enemyAILevel: 4,                // Increased from 3
+      enemyEnergyRegen: 5,            // Increased from 4
+      rewardMultiplier: 1.5,
+      multiActionChance: 0.75,        // Increased from 0.6
+      aggressionLevel: 0.8,           // Increased from 0.7
+      startingEnergy: 18,             // New
+      bonusStartingItems: 3,          // New
+      focusFireChance: 0.8,           // New
+      comboAwareness: 0.7,            // New
+      predictiveDepth: 3              // New
+    },
+    
+    expert: {
+      // Expert requires: 7 Form 3, 3 Form 2, 2 Form 1 + perfect play
+      enemyStatsMultiplier: 2.0,      // Increased from 1.5
+      enemyCreatureLevel: {
+        min: 2, // Mostly Form 3 creatures
+        max: 3
+      },
+      enemyRarity: {
+        common: 0,
+        rare: 0.1,
+        epic: 0.5,
+        legendary: 0.4
+      },
+      initialHandSize: 5,             // Increased from 4
+      enemyDeckSize: 10,              // Increased from 7
       maxFieldSize: 6,
-      enemyAILevel: 4,
-      enemyEnergyRegen: 5,
+      enemyAILevel: 5,                // Increased from 4
+      enemyEnergyRegen: 7,            // Increased from 5
       rewardMultiplier: 2.0,
-      multiActionChance: 0.8,        // 80% chance for multiple actions
-      aggressionLevel: 0.85          // 85% aggression
+      multiActionChance: 0.95,        // Increased from 0.8
+      aggressionLevel: 0.95,          // Increased from 0.85
+      startingEnergy: 22,             // New
+      bonusStartingItems: 5,          // New
+      focusFireChance: 0.95,          // New
+      comboAwareness: 0.9,            // New
+      predictiveDepth: 4              // New
     }
   };
   
   return settings[difficulty] || settings.medium;
 };
 
-// ===== ENEMY CREATURE GENERATION =====
-// Generate enemy creatures based on difficulty - BALANCED FOR FAIR GAMEPLAY
+// ===== ENHANCED ENEMY CREATURE GENERATION =====
+// Generate enemy creatures with increased power
 export const generateEnemyCreatures = (difficulty, count = 5, playerCreatures = []) => {
   const settings = getDifficultySettings(difficulty);
   
-  // Use the deck size from settings
   const maxCreatureCount = settings.enemyDeckSize || 5;
   const adjustedCount = Math.min(count, maxCreatureCount);
   
@@ -115,7 +138,6 @@ export const generateEnemyCreatures = (difficulty, count = 5, playerCreatures = 
   const speciesPool = [];
   
   if (playerCreatures && playerCreatures.length > 0) {
-    // Extract unique species from player creatures
     const playerSpeciesIds = new Set();
     
     playerCreatures.forEach(creature => {
@@ -124,60 +146,69 @@ export const generateEnemyCreatures = (difficulty, count = 5, playerCreatures = 
       }
     });
     
-    // Convert to array
     Array.from(playerSpeciesIds).forEach(speciesId => {
       speciesPool.push(speciesId);
     });
   }
   
-  // ===== BALANCED ENEMY GENERATION =====
+  // ===== ENHANCED ENEMY GENERATION WITH BETTER COMPOSITION =====
   for (let i = 0; i < adjustedCount; i++) {
     // Generate a creature with appropriate rarity
     const rarity = selectRarity(settings.enemyRarity);
     
-    // Generate form level within allowed range
+    // Generate form level with bias towards higher forms
     let form;
     if (difficulty === 'expert') {
-      // Expert has higher chance for max form
-      form = Math.random() < 0.6 ? settings.enemyCreatureLevel.max : 
+      // Expert: 80% chance for max form
+      form = Math.random() < 0.8 ? settings.enemyCreatureLevel.max : 
              Math.floor(Math.random() * (settings.enemyCreatureLevel.max - settings.enemyCreatureLevel.min + 1)) + settings.enemyCreatureLevel.min;
     } else if (difficulty === 'hard') {
-      // Hard has balanced distribution
-      form = Math.floor(
-        Math.random() * (settings.enemyCreatureLevel.max - settings.enemyCreatureLevel.min + 1)
-      ) + settings.enemyCreatureLevel.min;
+      // Hard: 65% chance for max form
+      form = Math.random() < 0.65 ? settings.enemyCreatureLevel.max : 
+             Math.floor(Math.random() * (settings.enemyCreatureLevel.max - settings.enemyCreatureLevel.min + 1)) + settings.enemyCreatureLevel.min;
+    } else if (difficulty === 'medium') {
+      // Medium: Balanced distribution with slight bias to higher forms
+      const rand = Math.random();
+      if (rand < 0.4) {
+        form = settings.enemyCreatureLevel.max;
+      } else if (rand < 0.7) {
+        form = Math.max(settings.enemyCreatureLevel.min, settings.enemyCreatureLevel.max - 1);
+      } else {
+        form = settings.enemyCreatureLevel.min;
+      }
     } else {
-      // Easy/Medium bias toward lower forms
-      form = Math.random() < 0.7 ? settings.enemyCreatureLevel.min : 
+      // Easy: Still challenging but more manageable
+      form = Math.random() < 0.3 ? settings.enemyCreatureLevel.max : 
              Math.floor(Math.random() * (settings.enemyCreatureLevel.max - settings.enemyCreatureLevel.min + 1)) + settings.enemyCreatureLevel.min;
     }
     
-    // Select a species ID - either from player creatures or random
+    // Select a species ID
     let speciesId;
     if (speciesPool.length > 0) {
       speciesId = speciesPool[Math.floor(Math.random() * speciesPool.length)];
     } else {
-      // Get a random template if we don't have player species
       const template = getRandomCreatureTemplate();
       speciesId = template.id;
     }
     
-    // Generate stats aligned with balanced gameplay
+    // Generate enhanced stats
     const stats = generateEnemyStats(rarity, form, settings.enemyStatsMultiplier);
     
-    // Determine specialty stats
+    // Determine specialty stats (more specialties on higher difficulties)
     let specialtyStats = [];
     
-    // Based on the species, create appropriate specialty stats
     const statTypes = ['energy', 'strength', 'magic', 'stamina', 'speed'];
     
-    // Balanced specialty count
-    const specialtyCount = (difficulty === 'hard' || difficulty === 'expert') ? 
-      (Math.random() < 0.6 ? 2 : 1) : // 60% chance for 2 specialty stats on harder
-      (Math.random() < 0.3 ? 2 : 1);  // 30% chance for 2 specialty stats on easier
+    // Enhanced specialty count based on difficulty
+    const specialtyCount = (difficulty === 'expert') ? 
+      (Math.random() < 0.8 ? 3 : 2) : // Expert: 80% chance for 3 specialties
+      (difficulty === 'hard') ?
+      (Math.random() < 0.7 ? 2 : 1) : // Hard: 70% chance for 2 specialties
+      (difficulty === 'medium') ?
+      (Math.random() < 0.5 ? 2 : 1) : // Medium: 50% chance for 2 specialties
+      (Math.random() < 0.3 ? 2 : 1);  // Easy: 30% chance for 2 specialties
     
     for (let j = 0; j < specialtyCount; j++) {
-      // Select a random stat that's not already included
       const availableStats = statTypes.filter(stat => !specialtyStats.includes(stat));
       const randomStat = availableStats[Math.floor(Math.random() * availableStats.length)];
       specialtyStats.push(randomStat);
@@ -189,17 +220,22 @@ export const generateEnemyCreatures = (difficulty, count = 5, playerCreatures = 
     // Add specialty stats to the creature
     creature.specialty_stats = specialtyStats;
     
-    // Add any form-specific evolution boosts
+    // Apply evolution boosts
     applyEvolutionBoosts(creature, form);
     
-    // Add random stat upgrades to simulate player progression
-    addRandomStatUpgrades(creature, form, difficulty);
+    // Add enhanced stat upgrades based on difficulty
+    addEnhancedStatUpgrades(creature, form, difficulty);
     
     // Add combination bonuses on harder difficulties
-    if ((difficulty === 'hard' || difficulty === 'expert') && Math.random() < 0.3) {
-      const combinationLevel = Math.floor(Math.random() * 2) + 1; // 1-2 combination levels
-      creature.combination_level = combinationLevel;
-      applyCombinationBonuses(creature, combinationLevel);
+    if (difficulty === 'hard' || difficulty === 'expert') {
+      const combinationChance = difficulty === 'expert' ? 0.7 : 0.5;
+      if (Math.random() < combinationChance) {
+        const combinationLevel = difficulty === 'expert' ? 
+          Math.floor(Math.random() * 3) + 2 : // 2-4 combination levels
+          Math.floor(Math.random() * 2) + 1;  // 1-2 combination levels
+        creature.combination_level = combinationLevel;
+        applyCombinationBonuses(creature, combinationLevel);
+      }
     }
     
     creatures.push(creature);
@@ -208,41 +244,65 @@ export const generateEnemyCreatures = (difficulty, count = 5, playerCreatures = 
   return creatures;
 };
 
-// ===== ENEMY ITEMS GENERATION =====
+// ===== ENHANCED ENEMY ITEMS GENERATION =====
 
 /**
  * Generate enemy tools based on difficulty
- * @param {string} difficulty - The difficulty level
- * @param {number} count - Number of tools to generate
- * @returns {Array} Array of enemy tools
  */
 export const generateEnemyTools = (difficulty, count = 2) => {
   const settings = getDifficultySettings(difficulty);
   const tools = [];
   
+  // Enhanced tool counts based on difficulty
+  const toolCounts = {
+    easy: 2,
+    medium: 3,
+    hard: 4,
+    expert: 5
+  };
+  
+  const actualCount = toolCounts[difficulty] || count;
+  
   // Tool types and effects
   const toolTypes = ['energy', 'strength', 'magic', 'stamina', 'speed'];
   const toolEffects = ['Surge', 'Shield', 'Echo', 'Drain', 'Charge'];
   
-  // Rarity distribution based on difficulty
+  // Enhanced rarity distribution
   const rarityDistribution = {
-    easy: { Common: 0.8, Rare: 0.2, Epic: 0, Legendary: 0 },
-    medium: { Common: 0.6, Rare: 0.3, Epic: 0.1, Legendary: 0 },
-    hard: { Common: 0.4, Rare: 0.4, Epic: 0.15, Legendary: 0.05 },
-    expert: { Common: 0.2, Rare: 0.4, Epic: 0.3, Legendary: 0.1 }
+    easy: { Common: 0.6, Rare: 0.3, Epic: 0.1, Legendary: 0 },
+    medium: { Common: 0.3, Rare: 0.4, Epic: 0.25, Legendary: 0.05 },
+    hard: { Common: 0.1, Rare: 0.3, Epic: 0.4, Legendary: 0.2 },
+    expert: { Common: 0, Rare: 0.2, Epic: 0.4, Legendary: 0.4 }
   };
   
   const distribution = rarityDistribution[difficulty] || rarityDistribution.medium;
   
-  for (let i = 0; i < count; i++) {
-    // Select random type and effect
-    const toolType = toolTypes[Math.floor(Math.random() * toolTypes.length)];
-    const toolEffect = toolEffects[Math.floor(Math.random() * toolEffects.length)];
+  // Generate strategic tool combinations
+  const strategicCombos = [
+    { type: 'strength', effect: 'Surge' },    // Attack boost
+    { type: 'stamina', effect: 'Shield' },    // Defense boost
+    { type: 'magic', effect: 'Echo' },        // Sustained effects
+    { type: 'energy', effect: 'Drain' },      // Resource management
+    { type: 'speed', effect: 'Charge' }       // Setup plays
+  ];
+  
+  for (let i = 0; i < actualCount; i++) {
+    let toolType, toolEffect;
+    
+    // On higher difficulties, prefer strategic combinations
+    if ((difficulty === 'hard' || difficulty === 'expert') && Math.random() < 0.7) {
+      const combo = strategicCombos[i % strategicCombos.length];
+      toolType = combo.type;
+      toolEffect = combo.effect;
+    } else {
+      toolType = toolTypes[Math.floor(Math.random() * toolTypes.length)];
+      toolEffect = toolEffects[Math.floor(Math.random() * toolEffects.length)];
+    }
     
     // Generate rarity
     const rarity = selectItemRarity(distribution);
     
-    // Create tool object
+    // Create enhanced tool object
     const tool = {
       id: `enemy_tool_${Date.now()}_${i}`,
       name: `${rarity} ${toolEffect} ${toolType.charAt(0).toUpperCase() + toolType.slice(1)} Tool`,
@@ -251,8 +311,9 @@ export const generateEnemyTools = (difficulty, count = 2) => {
       rarity: rarity,
       image_url: `/assets/tools/${toolType}_${toolEffect.toLowerCase()}.png`,
       description: generateToolDescription(toolType, toolEffect, rarity),
-      power_level: calculateItemPowerLevel(rarity, difficulty),
-      usage_cost: 0 // Tools are free
+      power_level: calculateEnhancedItemPowerLevel(rarity, difficulty),
+      usage_cost: 0,
+      strategic_value: calculateStrategicValue(toolType, toolEffect, difficulty)
     };
     
     tools.push(tool);
@@ -263,37 +324,64 @@ export const generateEnemyTools = (difficulty, count = 2) => {
 
 /**
  * Generate enemy spells based on difficulty
- * @param {string} difficulty - The difficulty level
- * @param {number} count - Number of spells to generate
- * @returns {Array} Array of enemy spells
  */
 export const generateEnemySpells = (difficulty, count = 2) => {
   const settings = getDifficultySettings(difficulty);
   const spells = [];
   
+  // Enhanced spell counts
+  const spellCounts = {
+    easy: 1,
+    medium: 2,
+    hard: 3,
+    expert: 4
+  };
+  
+  const actualCount = spellCounts[difficulty] || count;
+  
   // Spell types and effects
   const spellTypes = ['energy', 'strength', 'magic', 'stamina', 'speed'];
   const spellEffects = ['Surge', 'Shield', 'Echo', 'Drain', 'Charge'];
   
-  // Rarity distribution (spells are generally rarer than tools)
+  // Enhanced rarity distribution for spells
   const rarityDistribution = {
-    easy: { Common: 0.7, Rare: 0.25, Epic: 0.05, Legendary: 0 },
-    medium: { Common: 0.5, Rare: 0.35, Epic: 0.13, Legendary: 0.02 },
-    hard: { Common: 0.3, Rare: 0.4, Epic: 0.25, Legendary: 0.05 },
-    expert: { Common: 0.1, Rare: 0.3, Epic: 0.45, Legendary: 0.15 }
+    easy: { Common: 0.5, Rare: 0.35, Epic: 0.15, Legendary: 0 },
+    medium: { Common: 0.2, Rare: 0.4, Epic: 0.3, Legendary: 0.1 },
+    hard: { Common: 0, Rare: 0.2, Epic: 0.5, Legendary: 0.3 },
+    expert: { Common: 0, Rare: 0, Epic: 0.4, Legendary: 0.6 }
   };
   
   const distribution = rarityDistribution[difficulty] || rarityDistribution.medium;
   
-  for (let i = 0; i < count; i++) {
-    // Select random type and effect
-    const spellType = spellTypes[Math.floor(Math.random() * spellTypes.length)];
-    const spellEffect = spellEffects[Math.floor(Math.random() * spellEffects.length)];
+  // Generate strategic spell combinations
+  const lethalCombos = [
+    { type: 'energy', effect: 'Surge' },      // High damage burst
+    { type: 'strength', effect: 'Drain' },    // Damage + heal
+    { type: 'magic', effect: 'Charge' },      // Delayed devastation
+    { type: 'stamina', effect: 'Shield' }     // Team protection
+  ];
+  
+  for (let i = 0; i < actualCount; i++) {
+    let spellType, spellEffect;
+    
+    // On expert, always use optimal spell combinations
+    if (difficulty === 'expert' && i < lethalCombos.length) {
+      const combo = lethalCombos[i];
+      spellType = combo.type;
+      spellEffect = combo.effect;
+    } else if (difficulty === 'hard' && Math.random() < 0.6) {
+      const combo = lethalCombos[Math.floor(Math.random() * lethalCombos.length)];
+      spellType = combo.type;
+      spellEffect = combo.effect;
+    } else {
+      spellType = spellTypes[Math.floor(Math.random() * spellTypes.length)];
+      spellEffect = spellEffects[Math.floor(Math.random() * spellEffects.length)];
+    }
     
     // Generate rarity
     const rarity = selectItemRarity(distribution);
     
-    // Create spell object
+    // Create enhanced spell object
     const spell = {
       id: `enemy_spell_${Date.now()}_${i}`,
       name: `${rarity} ${spellEffect} ${spellType.charAt(0).toUpperCase() + spellType.slice(1)} Spell`,
@@ -302,8 +390,9 @@ export const generateEnemySpells = (difficulty, count = 2) => {
       rarity: rarity,
       image_url: `/assets/spells/${spellType}_${spellEffect.toLowerCase()}.png`,
       description: generateSpellDescription(spellType, spellEffect, rarity),
-      power_level: calculateItemPowerLevel(rarity, difficulty),
-      mana_cost: 4 // Standard spell cost
+      power_level: calculateEnhancedItemPowerLevel(rarity, difficulty),
+      mana_cost: 4,
+      strategic_value: calculateStrategicValue(spellType, spellEffect, difficulty)
     };
     
     spells.push(spell);
@@ -313,54 +402,63 @@ export const generateEnemySpells = (difficulty, count = 2) => {
 };
 
 /**
- * Generate a balanced set of enemy items (tools and spells)
- * @param {string} difficulty - The difficulty level
- * @returns {Object} Object containing tools and spells arrays
+ * Generate a balanced set of enemy items with strategic diversity
  */
 export const generateEnemyItems = (difficulty) => {
   const settings = getDifficultySettings(difficulty);
   
-  // Calculate item counts based on difficulty
-  const itemCounts = {
-    easy: { tools: 1, spells: 0 },     // Easy: Only basic tools
-    medium: { tools: 2, spells: 1 },   // Medium: Tools + some spells
-    hard: { tools: 2, spells: 2 },     // Hard: Balanced tools and spells
-    expert: { tools: 3, spells: 3 }    // Expert: Many powerful items
-  };
+  // Generate base items
+  const tools = generateEnemyTools(difficulty);
+  const spells = generateEnemySpells(difficulty);
   
-  const counts = itemCounts[difficulty] || itemCounts.medium;
+  // Add bonus items based on difficulty settings
+  const bonusItems = settings.bonusStartingItems || 0;
+  
+  if (bonusItems > 0) {
+    // Add strategic bonus items
+    for (let i = 0; i < bonusItems; i++) {
+      if (Math.random() < 0.6) {
+        // 60% chance for bonus tool
+        tools.push(...generateEnemyTools(difficulty, 1));
+      } else {
+        // 40% chance for bonus spell
+        spells.push(...generateEnemySpells(difficulty, 1));
+      }
+    }
+  }
   
   return {
-    tools: generateEnemyTools(difficulty, counts.tools),
-    spells: generateEnemySpells(difficulty, counts.spells)
+    tools: tools,
+    spells: spells
   };
 };
 
 // ===== COMPREHENSIVE ENEMY GENERATION =====
 
 /**
- * Generate complete enemy loadout (creatures + items)
- * @param {string} difficulty - The difficulty level
- * @param {number} creatureCount - Number of creatures to generate
- * @param {Array} playerCreatures - Player's creatures for adaptive generation
- * @returns {Object} Complete enemy loadout with creatures, tools, and spells
+ * Generate complete enemy loadout with enhanced power
  */
 export const generateCompleteEnemyLoadout = (difficulty, creatureCount, playerCreatures = []) => {
   const creatures = generateEnemyCreatures(difficulty, creatureCount, playerCreatures);
   const items = generateEnemyItems(difficulty);
+  
+  // Calculate total enemy power for balancing
+  const totalPower = calculateTotalPower(creatures, items);
   
   return {
     creatures,
     tools: items.tools,
     spells: items.spells,
     difficulty: difficulty,
-    settings: getDifficultySettings(difficulty)
+    settings: getDifficultySettings(difficulty),
+    totalPower: totalPower,
+    composition: analyzeCreatureComposition(creatures)
   };
 };
 
-// ===== PRIVATE HELPER FUNCTIONS =====
+// ===== ENHANCED HELPER FUNCTIONS =====
 
-// Select rarity based on probability distribution (for creatures)
+// Select rarity based on probability distribution
 function selectRarity(rarityDistribution) {
   const rnd = Math.random();
   let cumulativeProbability = 0;
@@ -368,17 +466,14 @@ function selectRarity(rarityDistribution) {
   for (const [rarity, probability] of Object.entries(rarityDistribution)) {
     cumulativeProbability += probability;
     if (rnd <= cumulativeProbability) {
-      return rarity.charAt(0).toUpperCase() + rarity.slice(1); // Capitalize
+      return rarity.charAt(0).toUpperCase() + rarity.slice(1);
     }
   }
   
-  return 'Common'; // Fallback
+  return 'Common';
 }
 
-/**
- * Select item rarity based on probability distribution (for items)
- * @private
- */
+// Select item rarity
 function selectItemRarity(distribution) {
   const random = Math.random();
   let cumulative = 0;
@@ -390,167 +485,214 @@ function selectItemRarity(distribution) {
     }
   }
   
-  return 'Common'; // Fallback
+  return 'Common';
 }
 
-// Generate stats based on balanced scaling
+// Generate enhanced stats with better scaling
 function generateEnemyStats(rarity, form, statsMultiplier) {
-  // Base stats based on rarity (per technical documentation)
+  // Enhanced base stats for higher challenge
   let baseStats;
   switch (rarity) {
     case 'Legendary':
-      baseStats = { energy: 8, strength: 8, magic: 8, stamina: 8, speed: 8 };
+      baseStats = { energy: 10, strength: 10, magic: 10, stamina: 10, speed: 10 };
       break;
     case 'Epic':
-      baseStats = { energy: 7, strength: 7, magic: 7, stamina: 7, speed: 7 };
+      baseStats = { energy: 9, strength: 9, magic: 9, stamina: 9, speed: 9 };
       break;
     case 'Rare':
-      baseStats = { energy: 6, strength: 6, magic: 6, stamina: 6, speed: 6 };
+      baseStats = { energy: 8, strength: 8, magic: 8, stamina: 8, speed: 8 };
       break;
     default: // Common
-      baseStats = { energy: 5, strength: 5, magic: 5, stamina: 5, speed: 5 };
+      baseStats = { energy: 7, strength: 7, magic: 7, stamina: 7, speed: 7 };
   }
   
-  // Apply difficulty multiplier to make enemies appropriately challenging
+  // Apply enhanced difficulty multiplier
   const stats = {};
   for (const [stat, value] of Object.entries(baseStats)) {
-    // Apply the difficulty multiplier with some variance
-    const variance = 0.9 + (Math.random() * 0.2); // ±10% variance
+    // Apply the difficulty multiplier with less variance for consistency
+    const variance = 0.95 + (Math.random() * 0.1); // ±5% variance
     stats[stat] = Math.round(value * statsMultiplier * variance);
     
-    // Ensure stats don't go below 1 or above reasonable maximums
-    stats[stat] = Math.max(1, Math.min(15, stats[stat]));
+    // Ensure stats are within reasonable bounds
+    stats[stat] = Math.max(1, Math.min(20, stats[stat]));
   }
   
   return stats;
 }
 
-// Apply evolution boosts to creature stats based on form
+// Apply evolution boosts to creature stats
 function applyEvolutionBoosts(creature, form) {
   if (!creature || !creature.stats) return;
   
-  // No boosts for Form 0 (Egg)
-  if (form === 0) return;
-  
   const stats = creature.stats;
   
-  // Form 1 boost: +1 to all stats
+  // Enhanced evolution bonuses
   if (form >= 1) {
     Object.keys(stats).forEach(stat => {
-      stats[stat] += 1;
+      stats[stat] += 2; // Increased from 1
     });
   }
   
-  // Form 2 boost: +1 to all stats and +1 to specialty stats
   if (form >= 2) {
     Object.keys(stats).forEach(stat => {
-      stats[stat] += 1;
+      stats[stat] += 2; // Increased from 1
       
-      // Add an extra boost to specialty stats
+      // Extra boost to specialty stats
       if (creature.specialty_stats && creature.specialty_stats.includes(stat)) {
-        stats[stat] += 1;
+        stats[stat] += 2; // Increased from 1
       }
     });
   }
   
-  // Form 3 boost: +2 to all stats
   if (form >= 3) {
     Object.keys(stats).forEach(stat => {
-      stats[stat] += 2;
+      stats[stat] += 3; // Increased from 2
     });
   }
 }
 
-// Add random stat upgrades to simulate player progression
-function addRandomStatUpgrades(creature, form, difficulty) {
+// Add enhanced stat upgrades
+function addEnhancedStatUpgrades(creature, form, difficulty) {
   if (!creature || !creature.stats) return;
   
   const stats = creature.stats;
   
-  // Determine number of upgrades based on form and difficulty
-  let totalUpgrades = form * 3; // Base upgrades per form
+  // Significantly increased upgrade amounts
+  let totalUpgrades = form * 5; // Increased from 3
   
-  // Add balanced upgrades for harder difficulties
+  // Add more upgrades for harder difficulties
   switch (difficulty) {
     case 'easy':
-      totalUpgrades += 0;
+      totalUpgrades += 3;
       break;
     case 'medium':
-      totalUpgrades += 2;
+      totalUpgrades += 6;
       break;
     case 'hard':
-      totalUpgrades += 4;
+      totalUpgrades += 10;
       break;
     case 'expert':
-      totalUpgrades += 6;
+      totalUpgrades += 15;
       break;
   }
   
-  // Apply random upgrades with bias toward specialty stats
+  // Apply upgrades with strong bias toward specialty stats
   for (let i = 0; i < totalUpgrades; i++) {
     let statToUpgrade;
     
-    // 50% chance to upgrade a specialty stat if available
-    if (creature.specialty_stats && creature.specialty_stats.length > 0 && Math.random() < 0.5) {
+    // 70% chance to upgrade a specialty stat
+    if (creature.specialty_stats && creature.specialty_stats.length > 0 && Math.random() < 0.7) {
       statToUpgrade = creature.specialty_stats[Math.floor(Math.random() * creature.specialty_stats.length)];
     } else {
-      // Select a random stat to upgrade
       const availableStats = Object.keys(stats);
       statToUpgrade = availableStats[Math.floor(Math.random() * availableStats.length)];
     }
     
-    // Add upgrade points
     stats[statToUpgrade] += 1;
   }
+  
+  // Apply minimum stat thresholds based on difficulty
+  const minStats = {
+    easy: 5,
+    medium: 7,
+    hard: 9,
+    expert: 12
+  };
+  
+  const minStat = minStats[difficulty] || 5;
+  Object.keys(stats).forEach(stat => {
+    if (stats[stat] < minStat) {
+      stats[stat] = minStat;
+    }
+  });
 }
 
-// Apply combination bonuses for enhanced creatures
+// Apply enhanced combination bonuses
 function applyCombinationBonuses(creature, combinationLevel) {
   if (!creature || !creature.stats || !creature.specialty_stats) return;
   
   const stats = creature.stats;
   
-  // Each combination level adds bonuses to specialty stats
+  // Enhanced bonuses per combination level
   creature.specialty_stats.forEach(stat => {
     if (stats[stat] !== undefined) {
-      stats[stat] += combinationLevel; // +1 per combination level to specialty stats
+      stats[stat] += combinationLevel * 2; // Increased from 1
     }
   });
   
-  // Set the combination level on the creature
+  // Add general stat boost for high combination levels
+  if (combinationLevel >= 3) {
+    Object.keys(stats).forEach(stat => {
+      stats[stat] += 1;
+    });
+  }
+  
   creature.combination_level = combinationLevel;
 }
 
-/**
- * Calculate item power level based on rarity and difficulty
- * @private
- */
-function calculateItemPowerLevel(rarity, difficulty) {
+// Calculate enhanced item power level
+function calculateEnhancedItemPowerLevel(rarity, difficulty) {
   let basePower = 1.0;
   
-  // Rarity multipliers
+  // Enhanced rarity multipliers
   switch (rarity) {
-    case 'Legendary': basePower = 1.6; break;
-    case 'Epic': basePower = 1.4; break;
-    case 'Rare': basePower = 1.2; break;
+    case 'Legendary': basePower = 2.0; break;
+    case 'Epic': basePower = 1.7; break;
+    case 'Rare': basePower = 1.4; break;
     case 'Common': basePower = 1.0; break;
   }
   
-  // Difficulty multipliers
+  // Enhanced difficulty multipliers
   const difficultyMultipliers = {
-    easy: 0.9,
-    medium: 1.0,
-    hard: 1.1,
-    expert: 1.2
+    easy: 1.1,
+    medium: 1.3,
+    hard: 1.5,
+    expert: 1.8
   };
   
   return basePower * (difficultyMultipliers[difficulty] || 1.0);
 }
 
-/**
- * Generate tool description
- * @private
- */
+// Calculate strategic value of items
+function calculateStrategicValue(type, effect, difficulty) {
+  let value = 0;
+  
+  // Base value by effect
+  const effectValues = {
+    'Surge': 30,    // Immediate impact
+    'Shield': 35,   // Protection value
+    'Echo': 25,     // Long-term value
+    'Drain': 40,    // Versatile effect
+    'Charge': 45    // High potential
+  };
+  
+  value += effectValues[effect] || 20;
+  
+  // Type synergies
+  const typeSynergies = {
+    'energy-Drain': 10,
+    'strength-Surge': 10,
+    'magic-Echo': 10,
+    'stamina-Shield': 10,
+    'speed-Charge': 10
+  };
+  
+  value += typeSynergies[`${type}-${effect}`] || 0;
+  
+  // Difficulty bonus
+  const difficultyBonus = {
+    easy: 0,
+    medium: 5,
+    hard: 10,
+    expert: 15
+  };
+  
+  value += difficultyBonus[difficulty] || 0;
+  
+  return value;
+}
+
+// Generate enhanced tool descriptions
 function generateToolDescription(toolType, toolEffect, rarity) {
   const rarityAdjectives = {
     Common: 'basic',
@@ -582,10 +724,7 @@ function generateToolDescription(toolType, toolEffect, rarity) {
   return `A ${adjective} tool for ${typeDesc} that ${effectDesc}.`;
 }
 
-/**
- * Generate spell description
- * @private
- */
+// Generate enhanced spell descriptions
 function generateSpellDescription(spellType, spellEffect, rarity) {
   const rarityAdjectives = {
     Common: 'minor',
@@ -617,50 +756,128 @@ function generateSpellDescription(spellType, spellEffect, rarity) {
   return `A ${adjective} ${typeDesc} spell that ${effectDesc}.`;
 }
 
-// NEW: Get difficulty-specific battle tips
+// Calculate total power of enemy forces
+function calculateTotalPower(creatures, items) {
+  let totalPower = 0;
+  
+  // Calculate creature power
+  creatures.forEach(creature => {
+    const statSum = Object.values(creature.stats || {}).reduce((sum, stat) => sum + stat, 0);
+    const formBonus = (creature.form || 0) * 20;
+    const rarityBonus = { 'Legendary': 40, 'Epic': 30, 'Rare': 20, 'Common': 10 }[creature.rarity] || 10;
+    totalPower += statSum + formBonus + rarityBonus;
+  });
+  
+  // Calculate item power
+  const itemPower = (items.tools.length * 20) + (items.spells.length * 30);
+  totalPower += itemPower;
+  
+  return totalPower;
+}
+
+// Analyze creature composition
+function analyzeCreatureComposition(creatures) {
+  const composition = {
+    form0: 0,
+    form1: 0,
+    form2: 0,
+    form3: 0,
+    averageStats: 0,
+    rarityBreakdown: {
+      Common: 0,
+      Rare: 0,
+      Epic: 0,
+      Legendary: 0
+    }
+  };
+  
+  let totalStats = 0;
+  
+  creatures.forEach(creature => {
+    // Count forms
+    const form = creature.form || 0;
+    composition[`form${form}`]++;
+    
+    // Count rarity
+    composition.rarityBreakdown[creature.rarity]++;
+    
+    // Sum stats
+    const statSum = Object.values(creature.stats || {}).reduce((sum, stat) => sum + stat, 0);
+    totalStats += statSum;
+  });
+  
+  composition.averageStats = Math.round(totalStats / Math.max(creatures.length, 1));
+  
+  return composition;
+}
+
+// NEW: Get enhanced difficulty tips
 export const getDifficultyTips = (difficulty) => {
   const tips = {
     easy: [
-      "Enemy creatures are slightly weaker than yours",
-      "AI will make basic tactical decisions",
-      "Good for learning game mechanics"
+      "Enemy creatures are 15% stronger than normal",
+      "AI makes tactical decisions and uses items strategically",
+      "Requires at least 1 Form 3, 1 Form 2, and 1 Form 1 creature to win",
+      "Good spell usage is essential for victory"
     ],
     medium: [
-      "Enemy creatures match your power level",
-      "AI uses strategic deployments and attacks",
-      "Expect some tool usage from enemies"
+      "Enemy creatures are 35% stronger than yours",
+      "AI uses advanced tactics and multi-action turns",
+      "Requires at least 2 Form 3, 1 Form 2, and 1 Form 1 creature",
+      "Expect coordinated attacks and strategic item usage"
     ],
     hard: [
-      "Enemy creatures are 20% stronger",
-      "AI makes optimal decisions most of the time",
-      "Enemies use tools and spells effectively"
+      "Enemy creatures are 60% stronger with multiple specialties",
+      "AI plays near-optimally with predictive planning",
+      "Requires at least 4 Form 3, 2 Form 2, and 2 Form 1 creatures",
+      "Prepare for focus-fire tactics and lethal combos"
     ],
     expert: [
-      "Enemy creatures are 50% stronger",
-      "AI plays near-perfectly with multi-action turns",
-      "Prepare for intense battles with powerful items"
+      "Enemy creatures are 100% stronger with maximum upgrades",
+      "AI plays perfectly with multi-turn planning",
+      "Requires at least 7 Form 3, 3 Form 2, and 2 Form 1 creatures",
+      "Perfect resource management and execution required to win"
     ]
   };
   
   return tips[difficulty] || tips.medium;
 };
 
-// NEW: Calculate difficulty rating for matchmaking
+// NEW: Calculate enhanced difficulty rating
 export const calculateDifficultyRating = (playerCreatures, difficulty) => {
-  // Calculate average player power
+  // Calculate player composition
+  const playerComposition = analyzeCreatureComposition(playerCreatures);
+  
+  // Define minimum requirements for each difficulty
+  const requirements = {
+    easy: { form3: 1, form2: 1, form1: 1, avgStats: 45 },
+    medium: { form3: 2, form2: 1, form1: 1, avgStats: 55 },
+    hard: { form3: 4, form2: 2, form1: 2, avgStats: 65 },
+    expert: { form3: 7, form2: 3, form1: 2, avgStats: 75 }
+  };
+  
+  const req = requirements[difficulty] || requirements.medium;
+  
+  // Check if player meets requirements
+  const meetsRequirements = 
+    playerComposition.form3 >= req.form3 &&
+    playerComposition.form2 >= req.form2 &&
+    playerComposition.form1 >= req.form1 &&
+    playerComposition.averageStats >= req.avgStats;
+  
+  // Calculate power differential
   const playerPower = playerCreatures.reduce((total, creature) => {
     const statSum = Object.values(creature.stats || {}).reduce((sum, stat) => sum + stat, 0);
-    const formBonus = (creature.form || 0) * 10;
-    const rarityBonus = { 'Legendary': 20, 'Epic': 15, 'Rare': 10, 'Common': 5 }[creature.rarity] || 5;
+    const formBonus = (creature.form || 0) * 20;
+    const rarityBonus = { 'Legendary': 40, 'Epic': 30, 'Rare': 20, 'Common': 10 }[creature.rarity] || 10;
     return total + statSum + formBonus + rarityBonus;
   }, 0) / Math.max(playerCreatures.length, 1);
   
-  // Apply difficulty multiplier
   const difficultyMultipliers = {
-    easy: 0.8,
-    medium: 1.0,
-    hard: 1.3,
-    expert: 1.7
+    easy: 1.15,
+    medium: 1.35,
+    hard: 1.6,
+    expert: 2.0
   };
   
   const enemyPower = playerPower * (difficultyMultipliers[difficulty] || 1.0);
@@ -668,6 +885,11 @@ export const calculateDifficultyRating = (playerCreatures, difficulty) => {
   return {
     playerRating: Math.round(playerPower),
     enemyRating: Math.round(enemyPower),
-    balanced: Math.abs(playerPower - enemyPower) < playerPower * 0.2
+    meetsRequirements: meetsRequirements,
+    balanced: meetsRequirements,
+    composition: playerComposition,
+    recommendation: meetsRequirements ? 
+      `Your team composition meets the requirements for ${difficulty} difficulty.` :
+      `Warning: Your team may be underpowered for ${difficulty} difficulty. Consider improving your creatures or selecting a lower difficulty.`
   };
 };
